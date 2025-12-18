@@ -9,9 +9,11 @@ public class gameplay {
 	public static void main(String[] args) {
 
 		System.out.println("=== HEROES & MONSTERS ===");
-		System.out.println("El teu regne va ser masacrat per un deu maligne fa 10 anys. \nAra et trobes de cami cap al deu en cerca de vengança.\nEs hora de que decideixis quina classe de heroe vols ser.");
+		System.out.println(
+				"El teu regne va ser masacrat per un deu maligne fa 10 anys. \nAra et trobes de cami cap al deu en cerca de vengança.\nEs hora de que decideixis quina classe de heroe vols ser.");
 		crearPersonatge();
-		System.out.println("Ara mateix et trobes en un bosque molt perillos, no es recomable descansar\nSi descansas molt seguit es posible que et trobis amb enemics més perillosos");
+		System.out.println(
+				"\nAra mateix et trobes en un bosque molt perillos, no es recomable descansar\nSi descansas molt seguit es posible que et trobis amb enemics més perillosos");
 
 		int option;
 		do {
@@ -56,25 +58,41 @@ public class gameplay {
 					}
 				} while (option > 4);
 				monsterTurn();
-				if(hero.getLife() < 0){ break;}
-			} while (monster.getLife() > 0);
-			int exp = ((int)(Math.random() * monster.getLvl() * hero.getLvl() * 30 + 10));
+
+				if (monster.getLife() <= 0) {
+					break;
+				}
+
+			} while (hero.getLife() > 0);
+
+			if (hero.getLife() <= 0) {
+				break;
+			}
+
+			if (monster.getClass() == God.class && monster.getLife() <= 0) {
+				System.out.println(
+						"Amb molt d'esforç i sang pel cami, finalment compleixes la teva vengaça.\nFelicitats, aqui acaba la teva historia per ara.");
+				break;
+			}
+
+			double exp = (Math.random() * monster.getLvl() * hero.getLvl() * 30 + 10);
 			System.out.println("Has matat el monstre. \nHas guanyat " + exp + " d'experiencia.");
-			if(exp > 100){
+			if (exp > 100) {
 				System.out.println("Enorabona, has augmentat de nivell.");
 			}
 			hero.setExp(exp);
 			hero.levelUp();
+
 			System.out.println("Vols descansar ara que l'enemic a mort?");
 			System.out.println("1. Si");
 			System.out.println("2. No");
 			int j = validateInt(1, 2);
-			if( j == 1 ){
+			if (j == 1) {
 				hero.descansar();
 				rest++;
 			}
 
-		} while (option != 0 && hero.getLife() > 0);
+		} while (option != 0);
 	}
 
 	public static void crearPersonatge() {
@@ -87,21 +105,24 @@ public class gameplay {
 		switch (option) {
 			case 1 -> {
 				hero = new Warrior(name);
+				System.out.println("Amb la teva armadura i la teva espasa, emprens el teu cami.");
 			}
 			case 2 -> {
 				hero = new Mage(name);
+				System.out.println("Amb el teu bacle i coneixemts en la magia, emprens el teu cami.");
 			}
 			case 3 -> {
 				hero = new Archer(name);
+				System.out.println("Amb el teu arc i fletxes, emprens el teu cami.");
 			}
 		}
 	}
 
 	public static void actionAttack() {
 		if (Math.abs(monster.getPos() - hero.getPos()) <= 5) {
-			int dmg = hero.attack();
+			double dmg = hero.attack();
 			if (monster.getClass() == Golem.class) {
-				dmg -= (monster.getDefense() / (100 + monster.getDefense()));
+				dmg -= (monster.getDefense() / (100.0 + monster.getDefense()));
 			}
 			System.out.println("L'heroe ataca i fa " + dmg + " de dany.");
 			monster.setLife(-dmg);
@@ -111,7 +132,7 @@ public class gameplay {
 	}
 
 	public static void specialAbility() {
-		int dmg;
+		double dmg;
 		if (hero.getClass() == Mage.class) {
 			dmg = hero.useSpell();
 			if (dmg == 0) {
@@ -120,14 +141,16 @@ public class gameplay {
 				System.out.println("Conjures una bolla de foc que fa " + dmg + " de dany.");
 			}
 		} else {
-			dmg = hero.throwArrow() * Math.abs(monster.getPos() - hero.getPos());
-			dmg *= 0.1;
+			dmg = hero.throwArrow() * Math.abs(monster.getPos() - hero.getPos()) / 2;
+			if (monster.getWeaknes() == 2) {
+				dmg *= 1.5;
+			}
 		}
 		monster.setLife(-dmg);
 	}
 
 	public static void spawnMonster() {
-		int monst = (int) (Math.random() * 70 + (5 * hero.getLvl()) + (rest * 3));
+		double monst = Math.random() * 50 + (5 * hero.getLvl()) + (rest * 3);
 
 		if (monst < 80) {
 			monster = new Goblin();
@@ -140,24 +163,28 @@ public class gameplay {
 		}
 
 		monster.setPos((int) (Math.random() * 50 + 20));
-		monster.setExp(100 * ((int) (Math.random() * 5)));
+		monster.setExp(100 * (Math.random() * 5));
 		monster.levelUp();
 
 	}
 
 	public static void monsterTurn() {
 		if (Math.abs(monster.getPos() - hero.getPos()) <= 5) {
+			double dmg = monster.attack();
 			if (monster.getClass() == Vampire.class) {
 				double x = Math.random() * 100;
+				if (hero.getWeaknes() == monster.getType()) {
+					dmg *= 1.5;
+				}
 				if (x < 20) {
 					monster.suckBlood();
 				}
-				hero.setLife(-monster.attack());
+				hero.setLife(-dmg);
 			} else {
 				if (hero.getClass() == Warrior.class) {
-					hero.setLife(-(monster.attack() - (hero.getDefense() / (100 + hero.getDefense()))));
+					hero.setLife(-(dmg - (hero.getDefense() / (100.0 + hero.getDefense()))));
 				} else {
-					hero.setLife(-monster.attack());
+					hero.setLife(-dmg);
 				}
 			}
 		} else {
@@ -171,18 +198,18 @@ public class gameplay {
 		}
 	}
 
-	public static int validateInt(int x, int y){
+	public static int validateInt(int x, int y) {
 		int option;
-		do{
-			while(!sc.hasNextInt()){
-				System.out.println("Error. Has d'emprar un nombre");
+		do {
+			while (!sc.hasNextInt()) {
+				System.out.println("Error. Has d'introduir un nombre");
 				sc.next();
 			}
 			option = sc.nextInt();
-			if(option < x || option > y){
-				System.out.println("Error. Has d'entrar un nombre entre " + x + " y " + y);
+			if (option < x || option > y) {
+				System.out.println("Error. Has d'introduir un nombre entre " + x + " y " + y);
 			}
-		}while(option < x || option > y);
+		} while (option < x || option > y);
 		return option;
 	}
 }

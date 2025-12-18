@@ -2,7 +2,7 @@ public class Archer extends Player{
 	private int precision;
 	
 	public Archer(String nom) {
-		super(nom, 90, 60, 30);
+		super(nom, 90, 60, 30, 1, 2);
 		this.precision = 5;
 	}
 	

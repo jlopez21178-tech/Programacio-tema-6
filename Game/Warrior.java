@@ -1,24 +1,26 @@
-public class Warrior extends Player{
-	private int defense;
+public class Warrior extends Player {
+	private double defense;
 
 	public Warrior(String name) {
-		super(name, 120, 30, 50 );
-		this.defense = 35;
+		super(name, 120, 30, 50, 2, 1);
+		this.defense = 35.0;
 	}
-	
+
 	@Override
-	public int getDefense(){ return this.defense;}
-	
+	public double getDefense() {
+		return this.defense;
+	}
+
 	public boolean bloquejar() {
 		return true;
 	}
 
 	public void levelUp() {
 		super.levelUp();
-		this.defense += 5;
+		this.defense += 10;
 	}
-	
-	public void mostrarEstat(){
+
+	public void mostrarEstat() {
 		super.mostrarEstat();
 		System.out.println("Defense: " + this.defense);
 	}

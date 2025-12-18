@@ -1,19 +1,20 @@
-public class Golem extends Player{
+public class Golem extends Player {
 
-	private int defense;
-	
+	private double defense;
+
 	public Golem() {
-		super("Golem", 100, 100, 50);		
-		this.defense = 100;
+		super("Golem", 100, 100, 50, 3, 3);
+		this.defense = 100.0;
 	}
 
 	@Override
-	public int getDefense(){ return this.defense;}
+	public double getDefense() {
+		return this.defense;
+	}
 
-	public void mostrarEstat(){
+	public void mostrarEstat() {
 		super.mostrarEstat();
 		System.out.println("Defense: " + this.defense);
 	}
-
 
 }

@@ -1,6 +1,6 @@
-public class Goblin extends Player{
+public class Goblin extends Player {
 
 	public Goblin() {
-		super("Goblin", 50, 15, 7); 
+		super("Goblin", 50, 15, 7, 4, 1);
 	}
 }
