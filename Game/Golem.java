@@ -3,7 +3,7 @@ public class Golem extends Player {
 	private double defense;
 
 	public Golem() {
-		super("Golem", 100, 100, 50, 3, 3);
+		super("Golem", 100, 50, 3, 3, "▓", "\u001B[91m");
 		this.defense = 100.0;
 	}
 

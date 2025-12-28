@@ -1,11 +1,11 @@
 public class Vampire extends Player {
 
 	public Vampire() {
-		super("Vampire", 500, 200, 100, 1, 2);
+		super("Vampire", 500,  100, 1, 2, "Ð", "\u001B[91m");
 	}
 
-	@Override
-	public void suckBlood() {
-		this.setLife(50);
+	public int specialAbility() {
+		super.heal(100);
+		return 1;
 	}
 }

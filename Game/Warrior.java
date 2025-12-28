@@ -2,17 +2,17 @@ public class Warrior extends Player {
 	private double defense;
 
 	public Warrior(String name) {
-		super(name, 120, 30, 50, 2, 1);
+		super(name, 120, 50, 2, 1, "±", "\u001B[96m");
 		this.defense = 35.0;
 	}
 
-	@Override
 	public double getDefense() {
 		return this.defense;
 	}
 
-	public boolean bloquejar() {
-		return true;
+	public int specialAbility() {
+		System.out.println("Bloquejaras el següent atac.");
+		return 0;
 	}
 
 	public void levelUp() {
