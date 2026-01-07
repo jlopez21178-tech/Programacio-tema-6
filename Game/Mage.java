@@ -3,7 +3,7 @@ public class Mage extends Player {
 	private int maxSpellSlots;
 
 	public Mage(String nom) {
-		super(nom, 50, 10, 1, 3, "╠", "\u001B[95m");
+		super(nom, 50, 10,5, 1, 3, "╠", "\u001B[95m");
 		this.spellSlots = 4;
 		this.maxSpellSlots = this.spellSlots;
 	}

@@ -9,9 +9,9 @@ public class Map {
 
 	public void startGame(Player hero, Player monst) {
 		hero.setRow((int) (Math.random() * (this.size - 1)));
-		hero.setColumn((int) (Math.random() * ((this.size - 1) / 2)));
+		hero.setColumn((int) (Math.random() * ((this.size - 1) / 3)));
 		monst.setRow((int) (Math.random() * (this.size - 1)));
-		monst.setColumn((int) (Math.random() * ((this.size - 1) / 2) + ((this.size - 1) / 2)));
+		monst.setColumn((int) (Math.random() * ((this.size - 1) / 3) + ((this.size - 1) * 2 / 3)));
 	}
 
 	public void showMap() {
@@ -43,7 +43,7 @@ public class Map {
 	}
 
 	public boolean validMove(int row, int col) {
-		return (map[row][col].equals(" ") && (row < 0 || row >= this.size || col < 0 || col >= this.size));
+		return (map[row][col].equals("   ") && !(row < 0 || row >= this.size || col < 0 || col >= this.size));
 	}
 
 	public boolean inRange(Player hero, Player monst) {

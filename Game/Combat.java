@@ -1,15 +1,15 @@
 public class Combat {
   public static boolean probHit() {
-    return (Math.random() * 100 <= 60);
+    return (Math.random() <= 0.7);
   }
 
   public static boolean probSpecialAttack() {
-    return (Math.random() * 100 <= 30);
+    return (Math.random() <= 0.3);
   }
 
   public static void monstAttack(Player monst, Player hero) {
     if (probHit()) {
-      double dmg = monst.attack();
+      int dmg = (int) monst.attack();
       if (monst instanceof Vampire && probSpecialAttack()) {
         monst.specialAbility();
         System.out.println("El vampir fa un atac especial i et sucla la sang. Recupera 100 de vida");
@@ -17,14 +17,16 @@ public class Combat {
       if (hero.getWeaknes() == monst.getType()) {
         dmg *= 1.5;
       }
-      if (hero instanceof Warrior) {
-        dmg *= (hero.getDefense() / (100.0 + hero.getDefense()));
-      }
-      hero.recieveDmg(dmg);
+      dmg *= hero.dmgReduction();
+      dmg = hero.recieveDmg(dmg);
 
-      System.out.println("El monstre t'ataca i et fa " + dmg + " de dany.");
+      if (dmg == 0) {
+        System.out.println("Has bloquejat l'atac.");
+      } else {
+        System.out.println("El monstre t'ataca i et fa " + dmg + " de dany.");
+      }
     } else {
-      System.out.println("L'atac a fallat.");
+      System.out.println("El monstre t'ataca pero a fallat.");
     }
   }
 
@@ -34,9 +36,7 @@ public class Combat {
       if (monst.getWeaknes() == hero.getType() || monst.getWeaknes() == 4) {
         dmg *= 1.5;
       }
-      if (monst instanceof Golem) {
-        dmg *= (monst.getDefense() / (100.0 + monst.getDefense()));
-      }
+      dmg *= monst.dmgReduction();
       System.out.println("L'heroe ataca i fa " + dmg + " de dany.");
       monst.recieveDmg(dmg);
     } else {
@@ -44,8 +44,8 @@ public class Combat {
     }
   }
 
-  public static void heroSpecialAttack(Player hero, Player monst){
+  public static void heroSpecialAttack(Player hero, Player monst) {
     monst.recieveDmg(hero.specialAbility());
   }
-  
+
 }

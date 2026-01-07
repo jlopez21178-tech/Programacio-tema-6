@@ -7,6 +7,7 @@ public class Player {
 	private int actActionPoint;
 	private int maxActionPoint;
 	private int strength;
+	private int armor;
 	// Weakness explanation: 0 - none, 1 - Slash damage, 2 - Penetration damage,
 	// 3 - Contundent damage, 4 - All.
 	private int weakness;
@@ -17,13 +18,14 @@ public class Player {
 	private String icon;
 	private String color;
 
-	public Player(String name, double Life, int strength, int weakness, int attackType, String icon,
+	public Player(String name, double Life, int strength, int armor, int weakness, int attackType, String icon,
 			String color) {
 		this.name = name;
 		this.level = 1;
 		this.maxLife = this.actLife = Life;
 		this.maxActionPoint = this.actActionPoint = 1;
 		this.strength = strength;
+		this.armor = armor;
 		this.weakness = weakness;
 		this.attackType = attackType;
 		this.icon = icon; this.color = color;
@@ -46,7 +48,7 @@ public class Player {
 		return this.strength;
 	}
 
-	public double getDefense() {
+	public double getarmor() {
 		return -1;
 	}
 
@@ -90,8 +92,9 @@ public class Player {
 		this.exp = exp;
 	}
 
-	public void recieveDmg(double Life) {
+	public int recieveDmg(int Life) {
 		this.actLife -= Life;
+		return Life;
 	}
 
 	public void heal(double x) {
@@ -131,6 +134,7 @@ public class Player {
 		while (this.exp >= 100) {
 			this.level++;
 			this.maxLife *= 1.2;
+			this.actLife = this.maxLife;
 			this.strength *= 1.3;
 			this.exp -= 100;
 			if (this.getLvl() % 2 == 0) {
@@ -149,5 +153,9 @@ public class Player {
 
 	public int specialAbility() {
 		return -1;
+	}
+
+	public double dmgReduction(){
+		return (1 - (this.armor / (100.0 + this.armor)));
 	}
 }

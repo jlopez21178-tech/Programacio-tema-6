@@ -4,7 +4,6 @@ public class Gameplay {
 	public static Player hero;
 	public static Player monst;
 	public static int rest = 0;
-	public static boolean blocked = false;
 	public static final String RESET = "\u001B[0m";
 	public static final int SIZE = 7;
 	public static Map map = new Map(SIZE);
@@ -21,10 +20,9 @@ public class Gameplay {
 		crearPersonatge();
 		Utils.cleanScreen();
 		System.out.println(
-				"\nAra mateix et trobes en un bosque molt perillos, no es recomable descansar\nSi descansas molt seguit es posible que et trobis amb enemics més perillosos");
+				"\nAra mateix et trobes en un bosque molt perillos, no es recomanable descansar\nSi descansas molt seguit es posible que et trobis amb enemics més perillosos");
 
 		Utils.sleep(3000);
-		Utils.cleanScreen();
 		int option;
 		do {
 			spawnMonster();
@@ -39,41 +37,42 @@ public class Gameplay {
 					map.placePlayer(hero);
 					map.placePlayer(monst);
 					map.showMap();
-					System.out.println();
-					System.out.println("=== Accions disponibles ===");
-					System.out.println("1. Moure");
-					System.out.println("2. Atacar");
-					System.out.println("3. Abilitat especial");
-					System.out.println("4. Descansar");
-					System.out.println("5. Mostrar estat");
-					System.out.println("6. Mostrar estat del enemic");
-					System.out.println("0. Sortir");
-					option = Utils.validateInt(0, 6);
-					switch (option) {
-						case 1 -> {
-							map.moveHero(hero);
-							hero.useActionPoint();
+					do {
+						System.out.println();
+						System.out.println("=== Accions disponibles ===");
+						System.out.println("1. Moure");
+						System.out.println("2. Atacar");
+						System.out.println("3. Abilitat especial");
+						System.out.println("4. Descansar");
+						System.out.println("5. Mostrar estat");
+						System.out.println("6. Mostrar estat del enemic");
+						System.out.println("0. Sortir");
+						option = Utils.validateInt(0, 6);
+						switch (option) {
+							case 1 -> {
+								map.moveHero(hero);
+								hero.useActionPoint();
+							}
+							case 2 -> {
+								heroAttack();
+								hero.useActionPoint();
+							}
+							case 3 -> {
+								specialAbility();
+								hero.useActionPoint();
+							}
+							case 4 -> {
+								hero.descansar();
+								rest++;
+							}
+							case 5 -> {
+								hero.mostrarEstat();
+							}
+							case 6 -> {
+								monst.mostrarEstat();
+							}
 						}
-						case 2 -> {
-							heroAttack();
-							hero.useActionPoint();
-						}
-						case 3 -> {
-							specialAbility();
-							hero.useActionPoint();
-						}
-						case 4 -> {
-							hero.descansar();
-							rest++;
-						}
-						case 5 -> {
-							hero.mostrarEstat();
-						}
-						case 6 -> {
-							monst.mostrarEstat();
-						}
-					}
-					Utils.sleep(1500);
+					} while (option > 4);
 				} while (hero.getActionPoint() > 0);
 
 				monstTurn();
@@ -152,11 +151,7 @@ public class Gameplay {
 	}
 
 	public static void specialAbility() {
-		if (hero instanceof Warrior) {
-			blocked = true;
-		} else {
-			Combat.heroSpecialAttack(hero, monst);
-		}
+		Combat.heroSpecialAttack(hero, monst);
 	}
 
 	public static void spawnMonster() {
@@ -178,19 +173,13 @@ public class Gameplay {
 	public static void monstTurn() {
 		while (monst.getActionPoint() > 0) {
 			if (map.inRange(hero, monst)) {
-				if (blocked) {
-					System.out.println("Has bloquetjat l'atac.");
-					blocked = false;
-				} else {
-					Combat.monstAttack(monst, hero);
-				}
+				Combat.monstAttack(monst, hero);
 			} else {
 				System.out.println("El monstre es mou.");
 				map.moveMonst(monst, hero);
 			}
 			monst.useActionPoint();
 		}
-		blocked = false;
 	}
 
 }

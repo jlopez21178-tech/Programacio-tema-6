@@ -3,7 +3,7 @@ public class Archer extends Player {
 	private int maxArrow;
 
 	public Archer(String nom) {
-		super(nom, 90, 30, 1, 2, "¤", "\u001B[92m");
+		super(nom, 90, 30, 10, 1, 2, "¤", "\u001B[92m");
 		this.maxArrow = 10;
 		this.actArrow = this.maxArrow;
 	}
@@ -14,7 +14,7 @@ public class Archer extends Player {
 			this.actArrow--;
 			dmg = (int) (Math.random() * super.getStrength() + ((super.getStrength() * super.getLvl())));
 			System.out.println("Llances una fletxa que fa " + dmg + " de dany.");
-		} else{
+		} else {
 			System.out.println("No tens fletxes disponibles.");
 		}
 		return dmg;
@@ -25,7 +25,7 @@ public class Archer extends Player {
 		this.maxArrow += 5;
 	}
 
-	public void descansar(){
+	public void descansar() {
 		super.descansar();
 		this.actArrow = this.maxArrow;
 		System.out.println("Has recuperat les teves fletxes.");
